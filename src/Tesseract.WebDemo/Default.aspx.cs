@@ -64,23 +64,17 @@ namespace Tesseract.WebDemo
                     // have to load Pix via a bitmap since Pix doesn't support loading a stream.
                     using (var image1 = new System.Drawing.Bitmap(imageFile.PostedFile.InputStream))
                     {
-                     //  var image = image1.Clone(new Rectangle(0, 0, image1.Width, image1.Height), PixelFormat.Format8bppIndexed);
-                      // image = ImageHelper.CreateNonIndexedImage(image);
-                        //image = ImageHelper.Resize(image,  image.Width/2, image.Height/2);
-                      //  image = ImageHelper.SetGrayscale(image);
-                       // image = ImageHelper.RemoveNoise(image);
-
                         using (var pix = PixConverter.ToPix(image1))
                         {
                             using (var page = engine.Process(pix))
                             {
                                 meanConfidenceLabel.InnerText = String.Format("{0:P}", page.GetMeanConfidence());
                                 resultText.InnerText = page.GetText();
-                                //ResultTextHtmlTextArea.InnerText = GetHocrText(page);
-                                ////ResultTextXHtmlTextArea.InnerText = page.GetHOCRText(1, true);
-                                //ResultXml.InnerHtml = GetOcrXml(page);
+                                ResultTextHtmlTextArea.InnerText = GetHocrText(page);
+                                ResultTextXHtmlTextArea.InnerText = page.GetHOCRText(1);
+                                ResultXml.InnerHtml = GetOcrXml(page);
 
-                                File.WriteAllText("D:\\TesseractTEXT.txt", resultText.InnerText);
+                                //File.WriteAllText("D:\\TesseractTEXT.txt", resultText.InnerText);
                                 //File.WriteAllText("D:\\TesseractHTML.txt", ResultTextHtmlTextArea.InnerText);
                                 //File.WriteAllText("D:\\TesseractXML.txt", ResultXml.InnerHtml);
                             }
@@ -171,6 +165,8 @@ namespace Tesseract.WebDemo
 
         #endregion
     }
+
+    #region XML
 
     [XmlRoot("OcrWords")]
     public class OrcWors
@@ -331,4 +327,6 @@ namespace Tesseract.WebDemo
             return bmap;
         }
     }
+
+    #endregion
 }
